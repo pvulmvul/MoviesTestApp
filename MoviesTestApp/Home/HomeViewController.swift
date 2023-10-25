@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import Lottie
 
 final class HomeViewController: UIViewController {
 
     @IBOutlet private weak var searchBar: UISearchBar!
     @IBOutlet private weak var navigationTitle: UINavigationItem!
     @IBOutlet private weak var navigationBar: UINavigationBar!
+    @IBOutlet private weak var loaderView: UIView!
+    @IBOutlet private weak var lottieLoader: LottieAnimationView!
     @IBOutlet private weak var tabeView: UITableView!
 
     var homePresenter: HomePresenterProtocol?
@@ -24,13 +27,13 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setupUI()
     }
     
     func setupUI() {
         searchBar.placeholder = "Search".localized()
         navigationTitle.title = "Popular Movies".localized()
+        lottieLoader.loopMode = .loop
     }
 }
 
@@ -41,11 +44,13 @@ extension HomeViewController: HomeViewProtocol {
     }
 
     func startLoading() {
-        //loader logic
+        lottieLoader.play()
+        loaderView.isHidden = false
     }
 
     func finishLoading() {
-        //loader logic
+        lottieLoader.stop()
+        loaderView.isHidden = true
     }
 }
 

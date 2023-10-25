@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="MoviesTestApp" customModuleProvider="target">
             <connections>
+                <outlet property="loaderView" destination="UBz-AC-zPY" id="ebd-Bc-vdg"/>
+                <outlet property="lottieLoader" destination="Wk1-Pa-llj" id="DNS-IB-lfN"/>
                 <outlet property="navigationBar" destination="e8b-2c-faz" id="oTQ-Go-HQa"/>
                 <outlet property="navigationTitle" destination="4Yi-Ox-Ae4" id="dfc-I8-Lem"/>
                 <outlet property="searchBar" destination="ROy-8h-PZe" id="Psu-KV-7Ai"/>
@@ -39,23 +41,6 @@
                     </constraints>
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mAZ-FK-jxN">
-                    <rect key="frame" x="0.0" y="147" width="393" height="671"/>
-                    <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noWifi" translatesAutoresizingMaskIntoConstraints="NO" id="ZiI-h3-oTQ">
-                            <rect key="frame" x="132.66666666666666" y="271.66666666666669" width="127.99999999999997" height="128"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="128" id="RS3-TX-tmX"/>
-                                <constraint firstAttribute="height" constant="128" id="S2L-SF-Shd"/>
-                            </constraints>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <constraints>
-                        <constraint firstItem="ZiI-h3-oTQ" firstAttribute="centerY" secondItem="mAZ-FK-jxN" secondAttribute="centerY" id="CRc-Ee-Ljv"/>
-                        <constraint firstItem="ZiI-h3-oTQ" firstAttribute="centerX" secondItem="mAZ-FK-jxN" secondAttribute="centerX" id="Ea6-kT-RAJ"/>
-                    </constraints>
-                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="260" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bJh-OX-uNn">
                     <rect key="frame" x="0.0" y="147" width="393" height="705"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -65,28 +50,51 @@
                         <outlet property="delegate" destination="-1" id="xNx-bf-R9e"/>
                     </connections>
                 </tableView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UBz-AC-zPY" userLabel="LoaderView">
+                    <rect key="frame" x="0.0" y="147" width="393" height="705"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wk1-Pa-llj" customClass="LottieAnimationView" customModule="Lottie">
+                            <rect key="frame" x="146.66666666666666" y="302.66666666666669" width="100" height="100"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="100" id="Oqz-jp-FXt"/>
+                                <constraint firstAttribute="height" constant="100" id="srY-w1-sJa"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="animationName" value="loader"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="Wk1-Pa-llj" firstAttribute="centerX" secondItem="UBz-AC-zPY" secondAttribute="centerX" id="FvW-Fd-bJm"/>
+                        <constraint firstItem="Wk1-Pa-llj" firstAttribute="centerY" secondItem="UBz-AC-zPY" secondAttribute="centerY" id="Ryh-W0-C0g"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="gc3-ih-KLv"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="mAZ-FK-jxN" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="2e2-rH-4a9"/>
+                <constraint firstAttribute="bottom" secondItem="UBz-AC-zPY" secondAttribute="bottom" id="84U-o6-Zgy"/>
                 <constraint firstAttribute="bottom" secondItem="bJh-OX-uNn" secondAttribute="bottom" id="9ei-yg-2wa"/>
-                <constraint firstItem="mAZ-FK-jxN" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="Adh-I1-D3D"/>
                 <constraint firstItem="ROy-8h-PZe" firstAttribute="top" secondItem="e8b-2c-faz" secondAttribute="bottom" id="BQq-0z-HB0"/>
                 <constraint firstItem="ROy-8h-PZe" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="H9o-9e-AqV"/>
-                <constraint firstItem="gc3-ih-KLv" firstAttribute="trailing" secondItem="mAZ-FK-jxN" secondAttribute="trailing" id="He3-yT-Zuk"/>
                 <constraint firstItem="bJh-OX-uNn" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="SXR-xz-OPl"/>
+                <constraint firstItem="UBz-AC-zPY" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="WO6-ng-JyW"/>
                 <constraint firstItem="gc3-ih-KLv" firstAttribute="trailing" secondItem="bJh-OX-uNn" secondAttribute="trailing" id="dZk-xj-1K6"/>
                 <constraint firstItem="bJh-OX-uNn" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="fGm-dI-0xy"/>
+                <constraint firstItem="UBz-AC-zPY" firstAttribute="leading" secondItem="565-gf-1Of" secondAttribute="leading" id="hyq-7h-KbC"/>
                 <constraint firstItem="ROy-8h-PZe" firstAttribute="trailing" secondItem="gc3-ih-KLv" secondAttribute="trailing" id="koX-Ea-SAg"/>
-                <constraint firstItem="gc3-ih-KLv" firstAttribute="bottom" secondItem="mAZ-FK-jxN" secondAttribute="bottom" id="oWZ-ch-y5e"/>
+                <constraint firstAttribute="trailing" secondItem="UBz-AC-zPY" secondAttribute="trailing" id="sYc-Bg-M3q"/>
             </constraints>
-            <point key="canvasLocation" x="-411" y="-627"/>
+            <point key="canvasLocation" x="-411.4503816793893" y="-627.46478873239437"/>
         </view>
     </objects>
+    <designables>
+        <designable name="Wk1-Pa-llj"/>
+    </designables>
     <resources>
         <image name=" " width="128" height="128"/>
-        <image name="noWifi" width="512" height="512"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
