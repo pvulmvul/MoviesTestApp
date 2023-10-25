@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 protocol DetailsViewProtocol: NSObjectProtocol {
-    func showAlert(title: String, message: String)
+    func startAnimating()
+    func finishAnimating()
     func setupUI(movie: MovieDetails)
 }
 
 protocol DetailsPresenterProtocol {
-    func viewLoaded()
-    func fetchDetails(id: Int)
+    func fetchDetails()
 }
 
 class DetailsPresenter: DetailsPresenterProtocol {
@@ -39,12 +39,9 @@ class DetailsPresenter: DetailsPresenterProtocol {
         self.movieId = movieId
     }
     
-    func viewLoaded() {
-        fetchDetails(id: movieId)
-    }
-    
-    func fetchDetails(id: Int) {
-        networkService.getMovieDetails(id: id) { [weak self] (movie, error) in
+    func fetchDetails() {
+        self.view?.startAnimating()
+        networkService.getMovieDetails(id: movieId) { [weak self] (movie, error) in
             guard let self = self else { return }
             guard let movie = movie else {
                 guard let view = self.view as? UIViewController else { return }
@@ -52,6 +49,7 @@ class DetailsPresenter: DetailsPresenterProtocol {
                 return
             }
             self.movie = movie
+            self.view?.finishAnimating()
         }
     }
     

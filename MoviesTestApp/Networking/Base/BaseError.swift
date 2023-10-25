@@ -14,6 +14,7 @@ enum NetworkError: Error {
     case badRequest
     case forbidden
     case unauthorized
+    case noInternetConnection
     
     var description: String {
         switch self {
@@ -23,6 +24,7 @@ enum NetworkError: Error {
         case .badRequest: return "Bad request"
         case .forbidden: return "Forbidden"
         case .unauthorized: return "You are not authorized"
+        case .noInternetConnection: return "You are offline. Please, enable your Wi-Fi or connect using cellular data."
         }
     }
 }
