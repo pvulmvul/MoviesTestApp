@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Lottie
 
 class DetailsViewController: UIViewController {
     
+    @IBOutlet private weak var loaderView: UIView!
+    @IBOutlet weak var lottieLoader: LottieAnimationView!
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var posterImageView: UIImageView!
@@ -22,17 +25,25 @@ class DetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        fetchDetails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let detailsPresenter = detailsPresenter else { return }
-        detailsPresenter.viewLoaded()
+        setupLoader()
     }
     
     @IBAction func playButtonPressed(_ sender: Any) {
         //OPEN video player
+    }
+    
+    func fetchDetails() {
+        guard let detailsPresenter = detailsPresenter else { return }
+        detailsPresenter.fetchDetails()
+    }
+    
+    func setupLoader() {
+        lottieLoader.loopMode = .loop
     }
     
     func genres(_ genres: [Genre]) -> String {
@@ -45,12 +56,18 @@ class DetailsViewController: UIViewController {
 }
 
 extension DetailsViewController: DetailsViewProtocol {
-    func showAlert(title: String, message: String) {
-        //alert logic
+    
+    func startAnimating() {
+        loaderView.isHidden = false
+        lottieLoader.play()
+    }
+    
+    func finishAnimating() {
+        loaderView.isHidden = true
+        lottieLoader.stop()
     }
     
     func setupUI(movie: MovieDetails) {
-        self.title = movie.title
         descriptionLabel.text = movie.overview
         ratingLabel.text = "Rating".localized() + ": " + String(movie.voteAverage)
         genresLabel.text = genres(movie.genres)

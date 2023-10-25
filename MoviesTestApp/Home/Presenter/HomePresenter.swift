@@ -40,13 +40,14 @@ class HomePresenter: HomePresenterProtocol {
     }
     
     func handleInternetConnection(){
-        if Connectivity.isConnectedToInternet() {
+//        if Connectivity.isConnectedToInternet() {
+            self.view?.startLoading()
             fetchGenres()
             fetchMovies()
-        } else {
-            guard let view = self.view as? UIViewController else { return }
-            router.showAlert(view: view, title: "You are offline", description: "Please, enable your Wi-Fi or connect using cellular data.")
-        }
+//        } else {
+//            guard let view = self.view as? UIViewController else { return }
+//            router.showAlert(view: view, title: "You are offline", description: "Please, enable your Wi-Fi or connect using cellular data.")
+//        }
     }
     
     func fetchNextPageMovies(index: Int) {
@@ -58,14 +59,19 @@ class HomePresenter: HomePresenterProtocol {
     func fetchMovies() {
         networkService.getMovies(page: currentPage) { [weak self] (movies, error) in
             guard let self = self else { return }
-            guard let movies = movies else {
+            if let error = error {
+                self.view?.finishLoading()
                 guard let view = self.view as? UIViewController else { return }
-                self.router.showAlert(view: view, title: "Error", description: error?.description ?? "unknown error")
+                self.router.showAlert(view: view, title: "Error", description: error.description ?? "unknown error")
+            }
+            guard let movies = movies else {
+                self.view?.finishLoading()
                 return
             }
             
             self.movies += movies
             self.view?.reloadTableView()
+            self.view?.finishLoading()
         }
         currentPage += 1
     }

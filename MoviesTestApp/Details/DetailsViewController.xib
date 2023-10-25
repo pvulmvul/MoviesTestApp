@@ -15,6 +15,8 @@
                 <outlet property="countryYearLabel" destination="wNb-8f-2GS" id="Hm6-kV-30C"/>
                 <outlet property="descriptionLabel" destination="kPh-6j-DrE" id="k3Y-Bq-luw"/>
                 <outlet property="genresLabel" destination="W8R-rI-kMM" id="cFB-AL-XF8"/>
+                <outlet property="loaderView" destination="Ef8-Eb-Ozd" id="szl-Iw-fh2"/>
+                <outlet property="lottieLoader" destination="Imh-6n-mCA" id="BhI-G2-4cG"/>
                 <outlet property="movieTitleLabel" destination="bx1-NR-dsk" id="Xe2-2b-IUY"/>
                 <outlet property="playButton" destination="Sof-LQ-T0T" id="Ren-As-y0w"/>
                 <outlet property="posterImageView" destination="fOz-4R-74V" id="Y51-vf-PZd"/>
@@ -119,6 +121,27 @@
                     <viewLayoutGuide key="contentLayoutGuide" id="Mqo-MW-jrM"/>
                     <viewLayoutGuide key="frameLayoutGuide" id="BmM-GP-5vY"/>
                 </scrollView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ef8-Eb-Ozd" userLabel="LoaderView">
+                    <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Imh-6n-mCA" customClass="LottieAnimationView" customModule="Lottie">
+                            <rect key="frame" x="146.66666666666666" y="329.66666666666669" width="100" height="100"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="100" id="6ZM-2G-Csa"/>
+                                <constraint firstAttribute="height" constant="100" id="wPG-nc-6e4"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="animationName" value="loader"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="Imh-6n-mCA" firstAttribute="centerX" secondItem="Ef8-Eb-Ozd" secondAttribute="centerX" id="kkU-91-7xH"/>
+                        <constraint firstItem="Imh-6n-mCA" firstAttribute="centerY" secondItem="Ef8-Eb-Ozd" secondAttribute="centerY" id="s0R-SY-AEx"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -126,13 +149,20 @@
                 <constraint firstItem="d6p-6F-8Ov" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.930751" id="Dem-B2-BGR"/>
                 <constraint firstItem="DJv-z3-4sy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="G2l-Zx-CTW"/>
                 <constraint firstItem="DJv-z3-4sy" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="M0R-rA-AzT"/>
+                <constraint firstItem="Ef8-Eb-Ozd" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="NXq-Th-rxb"/>
                 <constraint firstAttribute="bottom" secondItem="DJv-z3-4sy" secondAttribute="bottom" id="PSq-FC-KqN"/>
+                <constraint firstItem="Ef8-Eb-Ozd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="kAH-Rf-pfa"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Ef8-Eb-Ozd" secondAttribute="bottom" id="q7U-du-Goc"/>
                 <constraint firstItem="DJv-z3-4sy" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="qsy-uQ-GeR"/>
                 <constraint firstItem="d6p-6F-8Ov" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="vhO-dD-u8P"/>
+                <constraint firstItem="Ef8-Eb-Ozd" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="wCg-4H-e03"/>
             </constraints>
             <point key="canvasLocation" x="116.79389312977099" y="20.422535211267608"/>
         </view>
     </objects>
+    <designables>
+        <designable name="Imh-6n-mCA"/>
+    </designables>
     <resources>
         <image name="play.circle.fill" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
