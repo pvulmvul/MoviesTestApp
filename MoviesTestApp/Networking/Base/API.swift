@@ -17,31 +17,29 @@ class API<T: TargetType> {
         
         AF.request(target.baseURL + target.path, method: method, parameters: parameters.0, encoding: parameters.1, headers: headers).responseJSON { (response) in
             guard let statusCode = response.response?.statusCode else {
-                print("StatusCode not found")
                 completionHandler(.failure(.unknown))
                 return
             }
             
             if statusCode == 200 {
                 guard let jsonResponse = try? response.result.get() else {
-                    print("jsonResponse error")
-                    completionHandler(.failure(.defaultError))
+                    completionHandler(.failure(.unknown))
                     return
                 }
                 guard let theJSONData = try? JSONSerialization.data(withJSONObject: jsonResponse, options: []) else {
-                    print("theJSONData error")
-                    completionHandler(.failure(.defaultError))
+                    completionHandler(.failure(.unknown))
                     return
                 }
                 guard let responseObj = try? JSONDecoder().decode(M.self, from: theJSONData) else {
-                    print("responseObj error")
-                    completionHandler(.failure(.defaultError))
+                    completionHandler(.failure(.unknown))
                     return
                 }
                 completionHandler(.success(responseObj))
                 
             } else {
                 switch statusCode {
+                case 401:
+                    completionHandler(.failure(.unauthorized))
                 case 404:
                     completionHandler(.failure(.notFound))
                 case 400:
@@ -54,7 +52,6 @@ class API<T: TargetType> {
                     completionHandler(.failure(.unknown))
                 }
             }
-            
         }
     }
     

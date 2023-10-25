@@ -11,6 +11,7 @@ import Alamofire
 enum MoviesNetworking {
     case getMovies(page: Int)
     case getGenres
+    case getMovieDetails(id: Int)
 }
 
 extension MoviesNetworking: TargetType {
@@ -27,12 +28,14 @@ extension MoviesNetworking: TargetType {
             return "/movie/popular"
         case .getGenres:
             return "/genre/movie/list"
+        case .getMovieDetails(let id):
+            return "/movie/\(id)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getMovies, .getGenres:
+        default:
             return .get
         }
     }
@@ -41,7 +44,7 @@ extension MoviesNetworking: TargetType {
         switch self {
         case .getMovies(let page):
             return .requestParameters(parameters: ["page" : page], encoding: URLEncoding.default)
-        case .getGenres:
+        case .getGenres, .getMovieDetails:
             return .request
         }
     }

@@ -7,16 +7,18 @@
 
 import Foundation
 
-typealias MoviesCompletion = ([MoviesResult]?, NetworkError?) -> Void
-typealias GenresCompletion = (Genres?, NetworkError?) -> Void
+typealias MoviesCompletion = ([Movie]?, NetworkError?) -> Void
+typealias GenresCompletion = ([Genre]?, NetworkError?) -> Void
+typealias MovieDetailsCompletion = (MovieDetails?, NetworkError?) -> Void
 
 protocol MoviesAPIProtocol {
     func getMovies(page: Int, completionHandler: @escaping MoviesCompletion)
     func getGenres(completionHandler: @escaping GenresCompletion)
+    func getMovieDetails(id: Int, completionHandler: @escaping MovieDetailsCompletion)
 }
 
 
-class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
+final class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
     func getMovies(page: Int, completionHandler: @escaping MoviesCompletion) {
         self.fetchData(target: .getMovies(page: page), responseClass: Movies.self) { result in
             switch result {
@@ -32,7 +34,21 @@ class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
         self.fetchData(target: .getGenres, responseClass: Genres.self) { result in
             switch result {
             case .success(let genres):
-                completionHandler(genres, nil)
+                completionHandler(genres.genres, nil)
+            case .failure(let error):
+                completionHandler(nil, error)
+            }
+        }
+    }
+    
+    func getMovieDetails(id: Int, completionHandler: @escaping MovieDetailsCompletion) {
+        self.fetchData(target: .getMovieDetails(id: id), responseClass: MovieDetails.self) { result in
+            switch result {
+            case .success(let details):
+                DispatchQueue.main.async {
+                    completionHandler(details, nil)
+                }
+                
             case .failure(let error):
                 completionHandler(nil, error)
             }

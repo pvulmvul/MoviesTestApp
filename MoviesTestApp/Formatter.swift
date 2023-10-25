@@ -8,10 +8,9 @@
 import Foundation
 
 extension DateFormatter {
-    static var dateFormatter: DateFormatter {
+    static var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.dateFormat = "yyyy"
         return formatter
-    }
+    }()
 }
-

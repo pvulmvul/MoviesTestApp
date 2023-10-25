@@ -13,18 +13,16 @@ enum NetworkError: Error {
     case unknown
     case badRequest
     case forbidden
-    case ok
-    case defaultError
+    case unauthorized
     
     var description: String {
         switch self {
-        case .notFound: return "NOT FOUND"
-        case .serverError: return "SERVER ERROR"
-        case .unknown: return "UNKNOWN ERROR"
-        case .badRequest: return "BAD REQUEST"
-        case .forbidden: return "FORBIDDEN"
-        case .ok: return "SUCCESS"
-        case .defaultError: return "ERROR"
+        case .notFound: return "The resource is not found"
+        case .serverError: return "Internal server error"
+        case .unknown: return "Unknown error"
+        case .badRequest: return "Bad request"
+        case .forbidden: return "Forbidden"
+        case .unauthorized: return "You are not authorized"
         }
     }
 }
