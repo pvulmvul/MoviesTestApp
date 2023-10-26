@@ -9,9 +9,21 @@ import Foundation
 import Alamofire
 
 enum MoviesNetworking {
-    case getMovies(page: Int)
+    case getMovies(page: Int, sortBy: SortingParameter?)
     case getGenres
     case getMovieDetails(id: Int)
+}
+
+enum SortingParameter {
+    case ascending
+    case descending
+    
+    var param: String {
+        switch self {
+        case .ascending: return "popularity.asc"
+        case .descending: return "popularity.desc"
+        }
+    }
 }
 
 extension MoviesNetworking: TargetType {
@@ -25,7 +37,7 @@ extension MoviesNetworking: TargetType {
     var path: String {
         switch self {
         case .getMovies:
-            return "/movie/popular"
+            return "/discover/movie"
         case .getGenres:
             return "/genre/movie/list"
         case .getMovieDetails(let id):
@@ -42,8 +54,11 @@ extension MoviesNetworking: TargetType {
     
     var task: Task {
         switch self {
-        case .getMovies(let page):
-            return .requestParameters(parameters: ["page" : page], encoding: URLEncoding.default)
+        case .getMovies(let page, let parameter):
+            return .requestParameters(parameters: [
+                "page": page,
+                "sort_by": parameter?.param ?? "popularity.desc"
+            ], encoding: URLEncoding.default)
         case .getGenres, .getMovieDetails:
             return .request
         }

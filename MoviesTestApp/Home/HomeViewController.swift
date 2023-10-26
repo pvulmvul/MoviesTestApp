@@ -15,6 +15,7 @@ final class HomeViewController: UIViewController {
     @IBOutlet private weak var navigationBar: UINavigationBar!
     @IBOutlet private weak var loaderView: UIView!
     @IBOutlet private weak var lottieLoader: LottieAnimationView!
+    @IBOutlet private weak var sortingButton: UIButton!
     @IBOutlet private weak var tableView: UITableView!
 
     var homePresenter: HomePresenterProtocol?
@@ -37,6 +38,11 @@ final class HomeViewController: UIViewController {
         searchBar.placeholder = "Search".localized()
         navigationTitle.title = "Popular Movies".localized()
         lottieLoader.loopMode = .loop
+    }
+    
+    @IBAction func sortingButtonPressed(_ sender: Any) {
+        guard let homePresenter = homePresenter else { return }
+        homePresenter.handleSorting()
     }
     
     @objc func refresh(_ sender: AnyObject) {
