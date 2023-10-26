@@ -22,7 +22,9 @@ struct Movie: Decodable {
     let id: Int
     let genreIDS: [Int]
     let overview: String
-    let posterPath, releaseDate, title: String
+    let posterPath: String?
+    let releaseDate: String
+    let title: String
     let video: Bool
     let voteAverage: Double
 
@@ -41,7 +43,7 @@ struct MovieViewModel {
     let id: Int
     let genres: [String]
     let overview: String
-    let posterPath: String
+    let posterPath: String?
     let releaseDate: String
     let title: String
     let video: Bool

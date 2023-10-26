@@ -12,15 +12,15 @@ typealias GenresCompletion = ([Genre]?, NetworkError?) -> Void
 typealias MovieDetailsCompletion = (MovieDetails?, NetworkError?) -> Void
 
 protocol MoviesAPIProtocol {
-    func getMovies(page: Int, completionHandler: @escaping MoviesCompletion)
+    func getMovies(page: Int, sortBy: SortingParameter?, completionHandler: @escaping MoviesCompletion)
     func getGenres(completionHandler: @escaping GenresCompletion)
     func getMovieDetails(id: Int, completionHandler: @escaping MovieDetailsCompletion)
 }
 
-
 final class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
-    func getMovies(page: Int, completionHandler: @escaping MoviesCompletion) {
-        self.fetchData(target: .getMovies(page: page), responseClass: Movies.self) { result in
+    
+    func getMovies(page: Int, sortBy: SortingParameter?, completionHandler: @escaping MoviesCompletion) {
+        self.fetchData(target: .getMovies(page: page, sortBy: sortBy), responseClass: Movies.self) { result in
             switch result {
             case .success(let movies):
                 completionHandler(movies.results, nil)

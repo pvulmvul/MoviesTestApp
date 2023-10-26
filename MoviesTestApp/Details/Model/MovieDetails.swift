@@ -11,7 +11,7 @@ import Foundation
 struct MovieDetails: Decodable {
     let genres: [Genre]
     let id: Int
-    let posterPath: String
+    let posterPath: String?
     let overview: String
     let productionCountries: [ProductionCountry]
     let releaseDate: String
