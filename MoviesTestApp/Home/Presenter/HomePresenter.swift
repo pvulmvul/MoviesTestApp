@@ -17,9 +17,10 @@ protocol HomeViewProtocol: NSObjectProtocol {
 protocol HomePresenterProtocol {
     func fetchNextPageMovies(index: Int)
     func setMoviesCount() -> Int
-    func setMovieModel(index: Int) -> MovieViewModel
+    func setMovieModel(index: Int) -> MovieViewModel?
     func showDetail(movie: MovieViewModel)
-    func handleInternetConnection()
+    func fetchData()
+    func refreshData()
 }
 
 class HomePresenter: HomePresenterProtocol {
@@ -39,15 +40,18 @@ class HomePresenter: HomePresenterProtocol {
         self.router = router
     }
     
-    func handleInternetConnection(){
-//        if Connectivity.isConnectedToInternet() {
-            self.view?.startLoading()
-            fetchGenres()
-            fetchMovies()
-//        } else {
-//            guard let view = self.view as? UIViewController else { return }
-//            router.showAlert(view: view, title: "You are offline", description: "Please, enable your Wi-Fi or connect using cellular data.")
-//        }
+    func refreshData() {
+        genres.removeAll()
+        movies.removeAll()
+        currentPage = 1
+        fetchGenres()
+        fetchMovies()
+    }
+    
+    func fetchData() {
+        self.view?.startLoading()
+        fetchGenres()
+        fetchMovies()
     }
     
     func fetchNextPageMovies(index: Int) {
@@ -55,14 +59,16 @@ class HomePresenter: HomePresenterProtocol {
             fetchMovies()
         }
     }
-
+    
     func fetchMovies() {
         networkService.getMovies(page: currentPage) { [weak self] (movies, error) in
             guard let self = self else { return }
             if let error = error {
-                self.view?.finishLoading()
                 guard let view = self.view as? UIViewController else { return }
-                self.router.showAlert(view: view, title: "Error", description: error.description ?? "unknown error")
+                self.view?.finishLoading()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.router.showAlert(view: view, title: "Error".localized(), description: error.description)
+                }
             }
             guard let movies = movies else {
                 self.view?.finishLoading()
@@ -80,7 +86,7 @@ class HomePresenter: HomePresenterProtocol {
         movies.count
     }
     
-    func setMovieModel(index: Int) -> MovieViewModel {
+    func setMovieModel(index: Int) -> MovieViewModel? {
         let movieFromAPI = movies[index]
         
         return MovieViewModel(

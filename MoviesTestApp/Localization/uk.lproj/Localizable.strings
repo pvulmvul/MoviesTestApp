@@ -9,3 +9,10 @@
 "Popular Movies" = "Популярні фільми";
 "Rating" = "Рейтинг";
 "Search" = "Пошук";
+"You are offline. Please, enable your Wi-Fi or connect using cellular data." = "Немає підключення до інтернету. Будь ласка, підключіться до WiFi, або мобільного зв'язку";
+"The resource is not found" = "Ресурс не знайдено";
+"Internal server error" = "Внутрішня помилка серверу";
+"Unknown error" = "Невідома помилка";
+"Forbidden" = "Доступ заборонено";
+"You are not authorized" = "Ви не авторизовані";
+"Error" = "Помилка";

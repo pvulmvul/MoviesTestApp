@@ -18,13 +18,13 @@ enum NetworkError: Error {
     
     var description: String {
         switch self {
-        case .notFound: return "The resource is not found"
-        case .serverError: return "Internal server error"
-        case .unknown: return "Unknown error"
-        case .badRequest: return "Bad request"
-        case .forbidden: return "Forbidden"
-        case .unauthorized: return "You are not authorized"
-        case .noInternetConnection: return "You are offline. Please, enable your Wi-Fi or connect using cellular data."
+        case .notFound: return "The resource is not found".localized()
+        case .serverError: return "Internal server error".localized()
+        case .unknown: return "Unknown error".localized()
+        case .badRequest: return "Bad request".localized()
+        case .forbidden: return "Forbidden".localized()
+        case .unauthorized: return "You are not authorized".localized()
+        case .noInternetConnection: return "You are offline. Please, enable your Wi-Fi or connect using cellular data.".localized()
         }
     }
 }

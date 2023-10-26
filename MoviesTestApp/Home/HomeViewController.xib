@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -16,7 +14,7 @@
                 <outlet property="navigationBar" destination="e8b-2c-faz" id="oTQ-Go-HQa"/>
                 <outlet property="navigationTitle" destination="4Yi-Ox-Ae4" id="dfc-I8-Lem"/>
                 <outlet property="searchBar" destination="ROy-8h-PZe" id="Psu-KV-7Ai"/>
-                <outlet property="tabeView" destination="bJh-OX-uNn" id="1V6-qK-eYf"/>
+                <outlet property="tableView" destination="bJh-OX-uNn" id="1V6-qK-eYf"/>
                 <outlet property="view" destination="565-gf-1Of" id="VcC-at-qQi"/>
             </connections>
         </placeholder>
@@ -90,9 +88,6 @@
             <point key="canvasLocation" x="-411.4503816793893" y="-627.46478873239437"/>
         </view>
     </objects>
-    <designables>
-        <designable name="Wk1-Pa-llj"/>
-    </designables>
     <resources>
         <image name=" " width="128" height="128"/>
         <systemColor name="systemBackgroundColor">
