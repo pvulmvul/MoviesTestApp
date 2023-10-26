@@ -15,14 +15,15 @@ final class HomeViewController: UIViewController {
     @IBOutlet private weak var navigationBar: UINavigationBar!
     @IBOutlet private weak var loaderView: UIView!
     @IBOutlet private weak var lottieLoader: LottieAnimationView!
-    @IBOutlet private weak var tabeView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
 
     var homePresenter: HomePresenterProtocol?
+    lazy var refreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCustomCells()
-        checkInternetConnectionAndProceed()
+        fetchMovies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,16 +32,22 @@ final class HomeViewController: UIViewController {
     }
     
     func setupUI() {
+        tableView.backgroundView = refreshControl
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         searchBar.placeholder = "Search".localized()
         navigationTitle.title = "Popular Movies".localized()
         lottieLoader.loopMode = .loop
     }
+    
+    @objc func refresh(_ sender: AnyObject) {
+        guard let homePresenter = homePresenter else { return }
+        homePresenter.refreshData()
+    }
 }
 
 extension HomeViewController: HomeViewProtocol {
-
     func reloadTableView() {
-        tabeView.reloadData()
+        tableView.reloadData()
     }
 
     func startLoading() {
@@ -49,6 +56,7 @@ extension HomeViewController: HomeViewProtocol {
     }
 
     func finishLoading() {
+        self.refreshControl.endRefreshing()
         lottieLoader.stop()
         loaderView.isHidden = true
     }
@@ -60,14 +68,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = setMovieModelForCell(index: indexPath.row)
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.id) as! MovieTableViewCell
+        guard let model = setMovieModelForCell(index: indexPath.row) else { return cell }
         cell.setupUI(model: model)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = setMovieModelForCell(index: indexPath.row)
+        guard let model = setMovieModelForCell(index: indexPath.row) else { return }
         moveToDetails(movie: model)
     }
 
@@ -77,9 +85,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HomeViewController {
-    func checkInternetConnectionAndProceed() {
+    func fetchMovies() {
         guard let homePresenter = homePresenter else { return }
-        homePresenter.handleInternetConnection()
+        homePresenter.fetchData()
     }
     
     func setMoviesCount() -> Int {
@@ -87,7 +95,7 @@ extension HomeViewController {
         return homePresenter.setMoviesCount()
     }
     
-    func setMovieModelForCell(index: Int) -> MovieViewModel {
+    func setMovieModelForCell(index: Int) -> MovieViewModel? {
         guard let homePresenter = homePresenter else {
             return MovieViewModel(
                 id: 0,
@@ -114,7 +122,7 @@ extension HomeViewController {
     }
 
     func registerCustomCells() {
-        tabeView.register(
+        tableView.register(
             MovieTableViewCell.nib,
             forCellReuseIdentifier: MovieTableViewCell.id
         )
