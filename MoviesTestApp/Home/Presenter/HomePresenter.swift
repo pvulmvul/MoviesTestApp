@@ -64,10 +64,6 @@ class HomePresenter: HomePresenterProtocol {
     }
     
     func handleSorting() {
-        currentPage = 1
-        genres.removeAll()
-        movies.removeAll()
-
         guard let view = self.view as? UIViewController else { return }
         
         router.showAlertSheet(checkedAction: checkedAction, view: view, title: "", description: "Sorting".localized()) { action in
@@ -76,13 +72,21 @@ class HomePresenter: HomePresenterProtocol {
             switch action.title {
             case "Ascending".localized():
                 self.currentSortingOption = .ascending
+                self.clearDataSourcesState()
                 self.fetchData()
             case "Descending".localized():
+                self.clearDataSourcesState()
                 self.currentSortingOption = .descending
                 self.fetchData()
             default: return
             }
         }
+    }
+    
+    func clearDataSourcesState() {
+        self.currentPage = 1
+        self.genres.removeAll()
+        self.movies.removeAll()
     }
     
     func fetchMovies() {
