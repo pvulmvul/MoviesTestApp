@@ -21,6 +21,7 @@ protocol HomePresenterProtocol {
     func showDetail(movie: MovieViewModel)
     func fetchData()
     func refreshData()
+    func handleSorting()
 }
 
 class HomePresenter: HomePresenterProtocol {
@@ -32,6 +33,8 @@ class HomePresenter: HomePresenterProtocol {
     var movies: [Movie] = []
     var genres: [Genre] = []
     var currentPage = 1
+    var currentSortingOption: SortingParameter? = .descending
+    var checkedAction: UIAlertAction?
     var totalPages = 500 //NOTE: In API Response there are 40640 total pages incoming, but in fact it contains only 500, so I hardcoded it too
     
     init(view: HomeViewProtocol, networkService: MoviesAPIProtocol, router: RouterProtocol) {
@@ -60,8 +63,30 @@ class HomePresenter: HomePresenterProtocol {
         }
     }
     
+    func handleSorting() {
+        currentPage = 1
+        genres.removeAll()
+        movies.removeAll()
+
+        guard let view = self.view as? UIViewController else { return }
+        
+        router.showAlertSheet(checkedAction: checkedAction, view: view, title: "", description: "Sorting".localized()) { action in
+            action.setValue(true, forKey: "checked")
+            self.checkedAction = action
+            switch action.title {
+            case "Ascending".localized():
+                self.currentSortingOption = .ascending
+                self.fetchData()
+            case "Descending".localized():
+                self.currentSortingOption = .descending
+                self.fetchData()
+            default: return
+            }
+        }
+    }
+    
     func fetchMovies() {
-        networkService.getMovies(page: currentPage) { [weak self] (movies, error) in
+        networkService.getMovies(page: currentPage, sortBy: currentSortingOption) { [weak self] (movies, error) in
             guard let self = self else { return }
             if let error = error {
                 guard let view = self.view as? UIViewController else { return }

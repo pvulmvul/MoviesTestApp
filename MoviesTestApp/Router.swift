@@ -10,6 +10,7 @@ import UIKit
 protocol RouterProtocol {
     func showDetail(id: Int, title: String)
     func showAlert(view: UIViewController, title: String, description: String)
+    func showAlertSheet(checkedAction: UIAlertAction?, view: UIViewController, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void)
     func popToRoot()
 }
 
@@ -42,6 +43,16 @@ final class Router: RouterProtocol {
             description: description
         ) else { return }
         view.present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertSheet(checkedAction: UIAlertAction?, view: UIViewController, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void) {
+        guard let alert = assemblyBuilder?.createAlertSheet(
+            checkedAction: checkedAction,
+            title: title,
+            description: description,
+            completion: completion
+        ) else { return}
+        view.present(alert, animated: true)
     }
     
     func popToRoot() {

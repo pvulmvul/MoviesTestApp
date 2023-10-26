@@ -11,7 +11,7 @@ import Lottie
 class DetailsViewController: UIViewController {
     
     @IBOutlet private weak var loaderView: UIView!
-    @IBOutlet weak var lottieLoader: LottieAnimationView!
+    @IBOutlet private weak var lottieLoader: LottieAnimationView!
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var posterImageView: UIImageView!
@@ -69,15 +69,19 @@ extension DetailsViewController: DetailsViewProtocol {
     
     func setupUI(movie: MovieDetails) {
         descriptionLabel.text = movie.overview
-        ratingLabel.text = "Rating".localized() + ": " + String(movie.voteAverage)
+        ratingLabel.text = "Rating".localized() + ": " + String(format: "%.1f", movie.voteAverage)
         genresLabel.text = genres(movie.genres)
-        posterImageView.loadImage(imagePath: Constant.Server.imageURL + movie.posterPath)
+        posterImageView.loadImage(imagePath: Constant.Server.imageURL + (movie.posterPath ?? ""))
         movieTitleLabel.text = movie.title
+        countryYearLabel.text = "\(countries(movie.productionCountries)) \(year(string: movie.releaseDate))"
+        playButton.isHidden = !movie.video
+    }
+    
+    func year(string: String) -> String {
         DateFormatter.dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let date = DateFormatter.dateFormatter.date(from: movie.releaseDate) else { return }
+        guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
         DateFormatter.dateFormatter.dateFormat = "yyyy"
         let year = DateFormatter.dateFormatter.string(from: date)
-        countryYearLabel.text = "\(countries(movie.productionCountries)), \(year)"
-        playButton.isHidden = !movie.video
+        return ", " + year
     }
 }

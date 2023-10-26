@@ -16,3 +16,6 @@
 "Forbidden" = "Доступ заборонено";
 "You are not authorized" = "Ви не авторизовані";
 "Error" = "Помилка";
+"Ascending" = "Від не популярних";
+"Descending" = "Від популярних";
+"Sorting" = "Сортування";
