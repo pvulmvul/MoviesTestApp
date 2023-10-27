@@ -16,7 +16,7 @@ struct MovieDetails: Decodable {
     let productionCountries: [ProductionCountry]
     let releaseDate: String
     let title: String
-    let video: Bool
+    let videos: Videos
     let voteAverage: Double
 
     enum CodingKeys: String, CodingKey {
@@ -26,8 +26,22 @@ struct MovieDetails: Decodable {
         case posterPath = "poster_path"
         case productionCountries = "production_countries"
         case releaseDate = "release_date"
-        case title, video
+        case title, videos
         case voteAverage = "vote_average"
+    }
+}
+
+// MARK: - Videos
+struct Videos: Decodable {
+    let results: [Video]
+}
+
+struct Video: Decodable {
+    let key: String
+    let type: String
+    
+    enum CodingKeys: String, CodingKey {
+        case key, type
     }
 }
 
