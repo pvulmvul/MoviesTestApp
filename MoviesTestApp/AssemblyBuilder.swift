@@ -6,15 +6,24 @@
 //
 
 import UIKit
+import AVKit
 
 protocol AssemblyBuilderProtocol {
     func createHomeModule(router: RouterProtocol) -> UIViewController
     func createDetailsModule(id: Int, title: String, router: RouterProtocol) -> UIViewController
+    func createVideoViewerModule(id: String, router: RouterProtocol) -> UIViewController
     func createAlertController(title: String, description: String) -> UIAlertController
     func createAlertSheet(checkedAction: UIAlertAction?, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void) -> UIAlertController
 }
 
 class AssemblyBuilder: AssemblyBuilderProtocol {
+    
+    func createVideoViewerModule(id: String, router: RouterProtocol) -> UIViewController {
+        let view = VideoViewerViewController()
+        view.presenter = VideoViewerPresenter(view: view, trailerID: id, router: router)
+        return view
+    }
+    
     func createAlertController(title: String, description: String) -> UIAlertController {
         let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)

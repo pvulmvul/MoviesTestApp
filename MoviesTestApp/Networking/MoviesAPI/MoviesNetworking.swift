@@ -62,8 +62,10 @@ extension MoviesNetworking: TargetType {
                 "page": page,
                 "sort_by": parameter?.param ?? "popularity.desc"
             ], encoding: URLEncoding.default)
-        case .getGenres, .getMovieDetails:
+        case .getGenres:
             return .request
+        case .getMovieDetails:
+            return .requestParameters(parameters: ["append_to_response": "videos"], encoding: URLEncoding.default)
         case .searchMovie(let page, let query):
             return .requestParameters(parameters: [
                 "page": page,

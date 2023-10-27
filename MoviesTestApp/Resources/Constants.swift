@@ -5,10 +5,9 @@
 //  Created by Paul Maul on 24.10.2023.
 //
 
-import Foundation
+import UIKit
 
 struct Constant {
-    
     struct Server {
         static let baseURL = "https://api.themoviedb.org/3"
         //NOTE: I've hardcoded this, because it's just a test project. In real project I'd store this in Keychain
@@ -16,6 +15,9 @@ struct Constant {
         static let imageURL = "https://image.tmdb.org/t/p/original"
     }
     
+    struct Media {
+        static let imagePlaceholder = UIImage(named: "noImagePlaceholder")
+    }
 }
 
 enum Header: String {

@@ -7,6 +7,7 @@
 
 import UIKit
 import Lottie
+import Lightbox
 
 class DetailsViewController: UIViewController {
     
@@ -34,7 +35,8 @@ class DetailsViewController: UIViewController {
     }
     
     @IBAction func playButtonPressed(_ sender: Any) {
-        //OPEN video player
+        guard let detailsPresenter = detailsPresenter else { return }
+        detailsPresenter.openTrailer()
     }
     
     func fetchDetails() {
@@ -72,13 +74,26 @@ extension DetailsViewController: DetailsViewProtocol {
         ratingLabel.text = "Rating".localized() + ": " + String(format: "%.1f", movie.voteAverage)
         genresLabel.text = genres(movie.genres)
         posterImageView.loadImage(imagePath: Constant.Server.imageURL + (movie.posterPath ?? ""))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didTapImage))
+        posterImageView.addGestureRecognizer(tap)
         movieTitleLabel.text = movie.title
         if countries(movie.productionCountries).isEmpty {
             countryYearLabel.text = year(string: movie.releaseDate)
         } else {
             countryYearLabel.text = "\(countries(movie.productionCountries)), \(year(string: movie.releaseDate))"
         }
-        playButton.isHidden = !movie.video
+        playButton.isHidden = movie.videos.results.isEmpty
+    }
+    
+    @objc func didTapImage() {
+        if let image = posterImageView.image {
+            if image != Constant.Media.imagePlaceholder {
+                let controller = LightboxController(images: [LightboxImage(image: image)])
+                controller.modalPresentationStyle = .fullScreen
+                LightboxConfig.PageIndicator.enabled = false
+                present(controller, animated: true)
+            }
+        }
     }
     
     func year(string: String) -> String {

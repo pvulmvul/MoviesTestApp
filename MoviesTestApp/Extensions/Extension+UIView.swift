@@ -13,7 +13,7 @@ extension UIImageView {
         self.kf.indicatorType = .activity
         self.kf.setImage(
             with: URL(string: imagePath),
-            placeholder: UIImage(named: "noImagePlaceholder"),
+            placeholder: Constant.Media.imagePlaceholder,
             options: [
                 .processor(DownsamplingImageProcessor(size: self.frame.size)),
                 .scaleFactor(UIScreen.main.scale),
