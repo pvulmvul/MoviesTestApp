@@ -7,14 +7,16 @@
 
 import Foundation
 
-typealias MoviesCompletion = ([Movie]?, NetworkError?) -> Void
+typealias MoviesCompletion = (Movies?, NetworkError?) -> Void
 typealias GenresCompletion = ([Genre]?, NetworkError?) -> Void
 typealias MovieDetailsCompletion = (MovieDetails?, NetworkError?) -> Void
+typealias SearchMovieCompletion = (Movies?, NetworkError?) -> Void
 
 protocol MoviesAPIProtocol {
     func getMovies(page: Int, sortBy: SortingParameter?, completionHandler: @escaping MoviesCompletion)
     func getGenres(completionHandler: @escaping GenresCompletion)
     func getMovieDetails(id: Int, completionHandler: @escaping MovieDetailsCompletion)
+    func searchMovie(page: Int, query: String, completionHandler: @escaping SearchMovieCompletion)
 }
 
 final class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
@@ -23,7 +25,7 @@ final class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
         self.fetchData(target: .getMovies(page: page, sortBy: sortBy), responseClass: Movies.self) { result in
             switch result {
             case .success(let movies):
-                completionHandler(movies.results, nil)
+                completionHandler(movies, nil)
             case .failure(let error):
                 completionHandler(nil, error)
             }
@@ -52,6 +54,17 @@ final class MoviesAPI: API<MoviesNetworking>, MoviesAPIProtocol {
             case .failure(let error):
                 completionHandler(nil, error)
             }
+        }
+    }
+    
+    func searchMovie(page: Int, query: String, completionHandler: @escaping SearchMovieCompletion) {
+        self.fetchData(target: .searchMovie(page: page, query: query), responseClass: Movies.self) { result in
+                switch result {
+                case .success(let movies):
+                    completionHandler(movies, nil)
+                case .failure(let error):
+                    completionHandler(nil, error)
+                }
         }
     }
     

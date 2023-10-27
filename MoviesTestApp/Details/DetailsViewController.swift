@@ -73,7 +73,11 @@ extension DetailsViewController: DetailsViewProtocol {
         genresLabel.text = genres(movie.genres)
         posterImageView.loadImage(imagePath: Constant.Server.imageURL + (movie.posterPath ?? ""))
         movieTitleLabel.text = movie.title
-        countryYearLabel.text = "\(countries(movie.productionCountries)) \(year(string: movie.releaseDate))"
+        if countries(movie.productionCountries).isEmpty {
+            countryYearLabel.text = year(string: movie.releaseDate)
+        } else {
+            countryYearLabel.text = "\(countries(movie.productionCountries)), \(year(string: movie.releaseDate))"
+        }
         playButton.isHidden = !movie.video
     }
     
@@ -82,6 +86,6 @@ extension DetailsViewController: DetailsViewProtocol {
         guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
         DateFormatter.dateFormatter.dateFormat = "yyyy"
         let year = DateFormatter.dateFormatter.string(from: date)
-        return ", " + year
+        return year
     }
 }
