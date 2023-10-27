@@ -16,7 +16,6 @@ class API<T: TargetType> {
         let parameters = buildParams(task: target.task)
         
         AF.request(target.baseURL + target.path, method: method, parameters: parameters.0, encoding: parameters.1, headers: headers).responseJSON { (response) in
-            
             guard let statusCode = response.response?.statusCode else {
                 if Connectivity.isConnectedToInternet() {
                     completionHandler(.failure(.unknown))
