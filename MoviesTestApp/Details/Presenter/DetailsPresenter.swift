@@ -16,6 +16,7 @@ protocol DetailsViewProtocol: NSObjectProtocol {
 
 protocol DetailsPresenterProtocol {
     func fetchDetails()
+    func openTrailer()
 }
 
 class DetailsPresenter: DetailsPresenterProtocol {
@@ -52,6 +53,14 @@ class DetailsPresenter: DetailsPresenterProtocol {
             self.movie = movie
             self.view?.finishAnimating()
         }
+    }
+    
+    func openTrailer() {
+        guard let view = self.view as? UIViewController else { return }
+        guard  let trailerID = movie?.videos.results.first(where: { video in
+            video.type == "Trailer"
+        })?.key else { return }
+        router.showPlayer(view: view, id: trailerID)
     }
     
     func genres(movie: MovieDetails) -> [String] {

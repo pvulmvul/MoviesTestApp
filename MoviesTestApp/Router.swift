@@ -11,7 +11,9 @@ protocol RouterProtocol {
     func showDetail(id: Int, title: String)
     func showAlert(view: UIViewController, title: String, description: String)
     func showAlertSheet(checkedAction: UIAlertAction?, view: UIViewController, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void)
+    func showPlayer(view: UIViewController, id: String)
     func popToRoot()
+    func dismissPresented(view: UIViewController)
 }
 
 final class Router: RouterProtocol {
@@ -37,6 +39,12 @@ final class Router: RouterProtocol {
         navigationController.pushViewController(targetViewController, animated: true)
     }
     
+    func showPlayer(view: UIViewController, id: String) {
+        guard let player = assemblyBuilder?.createVideoViewerModule(id: id, router: self) else { return }
+        player.modalPresentationStyle = .fullScreen
+        view.present(player, animated: true)
+    }
+    
     func showAlert(view: UIViewController, title: String, description: String) {
         guard let alert = assemblyBuilder?.createAlertController(
             title: title,
@@ -58,6 +66,10 @@ final class Router: RouterProtocol {
     func popToRoot() {
         guard let navigationController = navigationController else { return }
         navigationController.popToRootViewController(animated: true)
+    }
+    
+    func dismissPresented(view: UIViewController) {
+        view.dismiss(animated: true)
     }
 }
 
