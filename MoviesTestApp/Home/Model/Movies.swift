@@ -10,10 +10,12 @@ import Foundation
 // MARK: - Movies
 struct Movies: Decodable {
     let page: Int
+    let totalPages: Int
     let results: [Movie]
 
     enum CodingKeys: String, CodingKey {
         case page, results
+        case totalPages = "total_pages"
     }
 }
 

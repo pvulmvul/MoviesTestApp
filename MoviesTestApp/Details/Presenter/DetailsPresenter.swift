@@ -45,6 +45,7 @@ class DetailsPresenter: DetailsPresenterProtocol {
             guard let self = self else { return }
             guard let movie = movie else {
                 guard let view = self.view as? UIViewController else { return }
+                self.router.popToRoot()
                 self.router.showAlert(view: view, title: "Error", description: error?.description ?? "unknown error")
                 return
             }

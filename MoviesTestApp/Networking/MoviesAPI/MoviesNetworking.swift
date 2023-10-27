@@ -12,6 +12,7 @@ enum MoviesNetworking {
     case getMovies(page: Int, sortBy: SortingParameter?)
     case getGenres
     case getMovieDetails(id: Int)
+    case searchMovie(page: Int, query: String)
 }
 
 enum SortingParameter {
@@ -42,6 +43,8 @@ extension MoviesNetworking: TargetType {
             return "/genre/movie/list"
         case .getMovieDetails(let id):
             return "/movie/\(id)"
+        case .searchMovie:
+            return "/search/movie"
         }
     }
     
@@ -61,6 +64,11 @@ extension MoviesNetworking: TargetType {
             ], encoding: URLEncoding.default)
         case .getGenres, .getMovieDetails:
             return .request
+        case .searchMovie(let page, let query):
+            return .requestParameters(parameters: [
+                "page": page,
+                "query": query
+            ], encoding: URLEncoding.default)
         }
     }
     
