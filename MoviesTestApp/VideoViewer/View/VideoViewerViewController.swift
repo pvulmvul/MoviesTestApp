@@ -21,11 +21,6 @@ class VideoViewerViewController: UIViewController {
         presenter?.loadTrailer()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     @IBAction func closeButtonPressed(_ sender: Any) {
         close()
     }
