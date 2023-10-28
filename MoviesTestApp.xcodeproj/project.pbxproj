@@ -242,7 +242,6 @@
 			children = (
 				CFC16E652AE7B31300E41E6F /* Base */,
 				CFC16E6A2AE7B43A00E41E6F /* MoviesAPI */,
-				CFC16E5C2AE6F64500E41E6F /* Models */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -272,13 +271,6 @@
 				CFC16E862AE8178E00E41E6F /* DetailsPresenter.swift */,
 			);
 			path = Presenter;
-			sourceTree = "<group>";
-		};
-		CFC16E5C2AE6F64500E41E6F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		CFC16E612AE7B22500E41E6F /* Delegates */ = {
