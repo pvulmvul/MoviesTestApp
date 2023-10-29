@@ -8,7 +8,7 @@
 import UIKit
 import youtube_ios_player_helper
 
-class VideoViewerViewController: UIViewController {
+final class VideoViewerViewController: UIViewController {
 
     @IBOutlet private weak var playerView: YTPlayerView!
     @IBOutlet private weak var closeButton: UIButton!
@@ -21,13 +21,8 @@ class VideoViewerViewController: UIViewController {
         presenter?.loadTrailer()
     }
     
-    @IBAction func closeButtonPressed(_ sender: Any) {
-        close()
-    }
-    
-    func close() {
-        guard let presenter = presenter else { return }
-        presenter.closePlayer()
+    @IBAction private func closeButtonPressed(_ sender: Any) {
+        presenter?.closePlayer()
     }
 }
 

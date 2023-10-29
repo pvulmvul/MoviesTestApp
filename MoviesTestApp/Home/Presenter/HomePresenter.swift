@@ -8,15 +8,17 @@
 import Foundation
 import UIKit
 
-protocol HomeViewProtocol: NSObjectProtocol {
+protocol HomeViewProtocol: AnyObject {
     func startLoading()
     func finishLoading()
+    func hideEmptyStateView()
+    func showEmptyStateView()
     func reloadTableView()
 }
 
 protocol HomePresenterProtocol {
     func fetchNextPageMovies(index: Int, isSearching: Bool, query: String?)
-    func setMoviesCount() -> Int
+    func getMoviesCount() -> Int
     func setMovieModel(index: Int) -> MovieViewModel?
     func showDetail(movie: MovieViewModel)
     func fetchData()
@@ -25,23 +27,23 @@ protocol HomePresenterProtocol {
     func searchMovie(query: String)
 }
 
-class HomePresenter: HomePresenterProtocol {
+final class HomePresenter: HomePresenterProtocol {
     
     weak var view: HomeViewProtocol?
-    let networkService: MoviesAPIProtocol
-    let router: RouterProtocol
+    private let networkService: MoviesAPIProtocol
+    private let router: RouterProtocol
     
-    var movies: [Movie] = []
-    var genres: [Genre] = []
-    var searchedMovies: [Movie] = []
-    var isSearching: Bool = false
-    var currentPage = 1
-    var currentSearchPage = 1
-    var currentQuery: String = ""
-    var currentSortingOption: SortingParameter? = .descending
-    var checkedAction: UIAlertAction?
-    var totalPages = 500 //NOTE: In API Response there are 40640 total pages incoming, but in fact it contains only 500, so I hardcoded it too
-    var totalSearchPages: Int = 0
+    private var movies: [Movie] = []
+    private var genres: [Genre] = []
+    private var searchedMovies: [Movie] = []
+    private var isSearching: Bool = false
+    private var currentPage = 1
+    private var currentSearchPage = 1
+    private var currentQuery: String = ""
+    private var currentSortingOption: SortingParameter? = .descending
+    private var checkedAction: AlertAction = .descending
+    private var totalPages = 500 //NOTE: In API Response there are 40640 total pages incoming, but in fact it contains only 500, so I hardcoded it too
+    private var totalSearchPages: Int = 0
     
     init(view: HomeViewProtocol, networkService: MoviesAPIProtocol, router: RouterProtocol) {
         self.view = view
@@ -89,15 +91,21 @@ class HomePresenter: HomePresenterProtocol {
             guard let self = self else { return }
             self.currentQuery = query
             if let error = error {
-                guard let view = self.view as? UIViewController else { return }
                 self.view?.finishLoading()
+                self.view?.showEmptyStateView()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.router.showAlert(view: view, title: "Error".localized(), description: error.description)
+                    self.router.showAlert(title: "Error".localized(), description: error.description)
                 }
             }
             guard let movies = movies else {
                 self.view?.finishLoading()
                 return
+            }
+            
+            if movies.results.isEmpty {
+                self.view?.showEmptyStateView()
+            } else {
+                self.view?.hideEmptyStateView()
             }
             
             self.totalSearchPages = movies.totalPages
@@ -108,14 +116,12 @@ class HomePresenter: HomePresenterProtocol {
     }
     
     func handleSorting() {
-        guard let view = self.view as? UIViewController else { return }
         if Connectivity.isConnectedToInternet() {
             if self.isSearching {
-                self.router.showAlert(view: view, title: "Error".localized(), description: "Sorting is not available on search results".localized())
+                self.router.showAlert(title: "Error".localized(), description: "Sorting is not available on search results".localized())
                 return
             }
-            router.showAlertSheet(checkedAction: checkedAction, view: view, title: "", description: "Sorting".localized()) { action in
-                action.setValue(true, forKey: "checked")
+            router.showAlertSheet(checkedAction: checkedAction, title: "", description: "Sorting".localized()) { action in
                 self.checkedAction = action
                 switch action.title {
                 case "Ascending".localized():
@@ -130,29 +136,35 @@ class HomePresenter: HomePresenterProtocol {
                 }
             }
         } else {
-            router.showAlert(view: view, title: "Error".localized(), description: "You are offline. Please, enable your Wi-Fi or connect using cellular data.".localized())
+            router.showAlert(title: "Error".localized(), description: "You are offline. Please, enable your Wi-Fi or connect using cellular data.".localized())
         }
     }
     
-    func clearDataSourcesState() {
+    private func clearDataSourcesState() {
         self.currentPage = 1
         self.genres.removeAll()
         self.movies.removeAll()
     }
     
-    func fetchMovies() {
+    private func fetchMovies() {
         networkService.getMovies(page: currentPage, sortBy: currentSortingOption) { [weak self] (movies, error) in
             guard let self = self else { return }
             if let error = error {
-                guard let view = self.view as? UIViewController else { return }
                 self.view?.finishLoading()
+                self.view?.showEmptyStateView()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.router.showAlert(view: view, title: "Error".localized(), description: error.description)
+                    self.router.showAlert(title: "Error".localized(), description: error.description)
                 }
             }
             guard let movies = movies else {
                 self.view?.finishLoading()
                 return
+            }
+            
+            if movies.results.isEmpty {
+                self.view?.showEmptyStateView()
+            } else {
+                self.view?.hideEmptyStateView()
             }
             
             self.movies += movies.results
@@ -162,7 +174,7 @@ class HomePresenter: HomePresenterProtocol {
         currentPage += 1
     }
     
-    func setMoviesCount() -> Int {
+    func getMoviesCount() -> Int {
         isSearching ? searchedMovies.count : movies.count
     }
     
@@ -174,14 +186,12 @@ class HomePresenter: HomePresenterProtocol {
             genres: genres(movie: movieFromAPI),
             overview: movieFromAPI.overview,
             posterPath: movieFromAPI.posterPath,
-            releaseDate: movieFromAPI.releaseDate,
-            title: movieFromAPI.title,
-            video: movieFromAPI.video,
-            voteAverage: movieFromAPI.voteAverage
+            title: "\(movieFromAPI.title), \(year(string: movieFromAPI.releaseDate))",
+            voteAverage: "Rating".localized() + ": " + String(movieFromAPI.voteAverage)
         )
     }
     
-    func fetchGenres() {
+    private func fetchGenres() {
         networkService.getGenres { [weak self] (genres, error) in
             guard let self = self else { return }
             genres?.forEach({ genre in
@@ -194,13 +204,12 @@ class HomePresenter: HomePresenterProtocol {
         if Connectivity.isConnectedToInternet() {
             router.showDetail(id: movie.id, title: movie.title)
         } else {
-            guard let view = view as? UIViewController else { return }
-            router.showAlert(view: view, title: "Error".localized(), description: "You are offline. Please, enable your Wi-Fi or connect using cellular data.".localized())
+            router.showAlert(title: "Error".localized(), description: "You are offline. Please, enable your Wi-Fi or connect using cellular data.".localized())
         }
         
     }
     
-    func genres(movie: Movie) -> [String] {
+    private func genres(movie: Movie) -> String {
         var genresNames: [String] = []
         movie.genreIDS.forEach { id in
             genres.forEach { genre in
@@ -209,6 +218,14 @@ class HomePresenter: HomePresenterProtocol {
                 }
             }
         }
-        return genresNames
+        return genresNames.joined(separator: ", ")
+    }
+    
+    private func year(string: String) -> String {
+        DateFormatter.dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
+        DateFormatter.dateFormatter.dateFormat = "yyyy"
+        let year = DateFormatter.dateFormatter.string(from: date)
+        return year
     }
 }

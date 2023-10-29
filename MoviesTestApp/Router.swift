@@ -9,18 +9,18 @@ import UIKit
 
 protocol RouterProtocol {
     func showDetail(id: Int, title: String)
-    func showAlert(view: UIViewController, title: String, description: String)
-    func showAlertSheet(checkedAction: UIAlertAction?, view: UIViewController, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void)
-    func showPlayer(view: UIViewController, id: String)
+    func showAlert(title: String, description: String)
+    func showAlertSheet(checkedAction: AlertAction, title: String, description: String, completion: @escaping (_ action: AlertAction) -> Void)
+    func showPlayer(id: String)
     func popToRoot()
-    func dismissPresented(view: UIViewController)
+    func dismissPresented()
 }
 
 final class Router: RouterProtocol {
 
     private let window: UIWindow
     private var navigationController: UINavigationController?
-    private let assemblyBuilder: AssemblyBuilderProtocol?
+    private let assemblyBuilder: AssemblyBuilderProtocol
 
     init(window: UIWindow, assemblyBuilder: AssemblyBuilderProtocol) {
         self.window = window
@@ -30,37 +30,38 @@ final class Router: RouterProtocol {
     
     func showDetail(id: Int, title: String) {
         guard let navigationController = navigationController else { return }
-        guard let targetViewController = assemblyBuilder?.createDetailsModule(
+        let targetViewController = assemblyBuilder.createDetailsModule(
             id: id,
-            title: title,
             router: self
-        ) else { return }
+        )
         targetViewController.title = title
         navigationController.pushViewController(targetViewController, animated: true)
     }
     
-    func showPlayer(view: UIViewController, id: String) {
-        guard let player = assemblyBuilder?.createVideoViewerModule(id: id, router: self) else { return }
-        player.modalPresentationStyle = .fullScreen
-        view.present(player, animated: true)
+    func showPlayer(id: String) {
+        guard let navigationController = navigationController else { return }
+        let player = assemblyBuilder.createVideoViewerModule(id: id, router: self)
+        navigationController.present(player, animated: true)
     }
     
-    func showAlert(view: UIViewController, title: String, description: String) {
-        guard let alert = assemblyBuilder?.createAlertController(
+    func showAlert(title: String, description: String) {
+        guard let navigationController = navigationController else { return }
+        let alert = assemblyBuilder.createAlertController(
             title: title,
             description: description
-        ) else { return }
-        view.present(alert, animated: true, completion: nil)
+        )
+        navigationController.present(alert, animated: true, completion: nil)
     }
     
-    func showAlertSheet(checkedAction: UIAlertAction?, view: UIViewController, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void) {
-        guard let alert = assemblyBuilder?.createAlertSheet(
+    func showAlertSheet(checkedAction: AlertAction, title: String, description: String, completion: @escaping (_ action: AlertAction) -> Void) {
+        guard let navigationController = navigationController else { return }
+        let alert = assemblyBuilder.createAlertSheet(
             checkedAction: checkedAction,
             title: title,
             description: description,
             completion: completion
-        ) else { return}
-        view.present(alert, animated: true)
+        )
+        navigationController.present(alert, animated: true)
     }
     
     func popToRoot() {
@@ -68,8 +69,9 @@ final class Router: RouterProtocol {
         navigationController.popToRootViewController(animated: true)
     }
     
-    func dismissPresented(view: UIViewController) {
-        view.dismiss(animated: true)
+    func dismissPresented() {
+        guard let navigationController = navigationController else { return }
+        navigationController.dismiss(animated: true)
     }
 }
 
@@ -83,11 +85,7 @@ private extension Router {
     }
 
     func makeRootViewController() -> UINavigationController? {
-        guard
-            let homeViewController = assemblyBuilder?.createHomeModule(router: self)
-        else {
-            return nil
-        }
+        let homeViewController = assemblyBuilder.createHomeModule(router: self)
 
         return UINavigationController(
             rootViewController: homeViewController

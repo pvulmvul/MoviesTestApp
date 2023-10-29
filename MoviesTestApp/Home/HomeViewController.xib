@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="MoviesTestApp" customModuleProvider="target">
             <connections>
+                <outlet property="emptyStateView" destination="bO4-Z1-TaQ" id="DfF-qH-Ckx"/>
                 <outlet property="loaderView" destination="UBz-AC-zPY" id="ebd-Bc-vdg"/>
                 <outlet property="lottieLoader" destination="Wk1-Pa-llj" id="DNS-IB-lfN"/>
                 <outlet property="navigationBar" destination="e8b-2c-faz" id="oTQ-Go-HQa"/>
@@ -32,12 +33,11 @@
                     <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <items>
                         <navigationItem largeTitleDisplayMode="never" id="4Yi-Ox-Ae4">
-                            <barButtonItem key="rightBarButtonItem" style="plain" id="CYZ-SS-KCV">
+                            <barButtonItem key="rightBarButtonItem" id="CYZ-SS-KCV">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="X0q-Cu-4fe">
                                     <rect key="frame" x="290" y="5" width="87" height="34.333333333333336"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <connections>
                                         <action selector="sortingButtonPressed:" destination="-1" eventType="touchUpInside" id="xwh-WI-edU"/>
                                     </connections>

@@ -5,9 +5,9 @@
 //  Created by Paul Maul on 28.10.2023.
 //
 
-import UIKit
+import Foundation
 
-protocol VideoViewerViewProtocol: NSObjectProtocol {
+protocol VideoViewerViewProtocol: AnyObject {
     func setupPlayer(id: String)
 }
 
@@ -16,11 +16,11 @@ protocol VideoViewerPresenterProtocol {
     func closePlayer()
 }
 
-class VideoViewerPresenter: VideoViewerPresenterProtocol {
-    weak var view: VideoViewerViewProtocol?
+final class VideoViewerPresenter: VideoViewerPresenterProtocol {
+    private weak var view: VideoViewerViewProtocol?
     
-    var trailerID: String
-    var router: RouterProtocol
+    private var trailerID: String
+    private var router: RouterProtocol
     
     init(view: VideoViewerViewProtocol, trailerID: String, router: RouterProtocol) {
         self.view = view
@@ -36,7 +36,6 @@ class VideoViewerPresenter: VideoViewerPresenterProtocol {
     }
     
     func closePlayer() {
-        guard let view = self.view as? UIViewController else { return }
-        router.dismissPresented(view: view)
+        router.dismissPresented()
     }
 }
