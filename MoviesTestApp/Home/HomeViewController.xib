@@ -14,10 +14,7 @@
                 <outlet property="emptyStateView" destination="bO4-Z1-TaQ" id="DfF-qH-Ckx"/>
                 <outlet property="loaderView" destination="UBz-AC-zPY" id="ebd-Bc-vdg"/>
                 <outlet property="lottieLoader" destination="Wk1-Pa-llj" id="DNS-IB-lfN"/>
-                <outlet property="navigationBar" destination="e8b-2c-faz" id="oTQ-Go-HQa"/>
-                <outlet property="navigationTitle" destination="4Yi-Ox-Ae4" id="dfc-I8-Lem"/>
                 <outlet property="searchBar" destination="ROy-8h-PZe" id="Psu-KV-7Ai"/>
-                <outlet property="sortingButton" destination="X0q-Cu-4fe" id="cjb-eZ-Mqa"/>
                 <outlet property="tableView" destination="bJh-OX-uNn" id="1V6-qK-eYf"/>
                 <outlet property="view" destination="565-gf-1Of" id="VcC-at-qQi"/>
             </connections>
@@ -27,27 +24,8 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
             <subviews>
-                <navigationBar contentMode="scaleToFill" translucent="NO" shadowImage=" " translatesAutoresizingMaskIntoConstraints="NO" id="e8b-2c-faz">
-                    <rect key="frame" x="0.0" y="39" width="393" height="44"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <items>
-                        <navigationItem largeTitleDisplayMode="never" id="4Yi-Ox-Ae4">
-                            <barButtonItem key="rightBarButtonItem" id="CYZ-SS-KCV">
-                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="X0q-Cu-4fe">
-                                    <rect key="frame" x="290" y="5" width="87" height="34.333333333333336"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <connections>
-                                        <action selector="sortingButtonPressed:" destination="-1" eventType="touchUpInside" id="xwh-WI-edU"/>
-                                    </connections>
-                                </button>
-                            </barButtonItem>
-                        </navigationItem>
-                    </items>
-                </navigationBar>
                 <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="ROy-8h-PZe">
-                    <rect key="frame" x="0.0" y="83" width="393" height="44"/>
+                    <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="HBT-Uv-4BK"/>
@@ -58,10 +36,10 @@
                     </connections>
                 </searchBar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bO4-Z1-TaQ">
-                    <rect key="frame" x="0.0" y="127" width="393" height="691"/>
+                    <rect key="frame" x="0.0" y="103" width="393" height="715"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noDataIcon" translatesAutoresizingMaskIntoConstraints="NO" id="pXk-DW-k7Q">
-                            <rect key="frame" x="96.666666666666686" y="245.66666666666669" width="200" height="200"/>
+                            <rect key="frame" x="96.666666666666686" y="257.66666666666669" width="200" height="200"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="200" id="50I-kd-Soz"/>
                                 <constraint firstAttribute="width" constant="200" id="6uM-Y9-3qt"/>
@@ -75,7 +53,7 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="260" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bJh-OX-uNn">
-                    <rect key="frame" x="0.0" y="127" width="393" height="725"/>
+                    <rect key="frame" x="0.0" y="103" width="393" height="749"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <connections>
@@ -84,10 +62,10 @@
                     </connections>
                 </tableView>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UBz-AC-zPY" userLabel="LoaderView">
-                    <rect key="frame" x="0.0" y="127" width="393" height="725"/>
+                    <rect key="frame" x="0.0" y="103" width="393" height="749"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wk1-Pa-llj" customClass="LottieAnimationView" customModule="Lottie">
-                            <rect key="frame" x="146.66666666666666" y="312.66666666666669" width="100" height="100"/>
+                            <rect key="frame" x="146.66666666666666" y="324.66666666666669" width="100" height="100"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="100" id="Oqz-jp-FXt"/>
@@ -111,19 +89,15 @@
                 <constraint firstAttribute="bottom" secondItem="UBz-AC-zPY" secondAttribute="bottom" id="84U-o6-Zgy"/>
                 <constraint firstItem="gc3-ih-KLv" firstAttribute="trailing" secondItem="bO4-Z1-TaQ" secondAttribute="trailing" id="9J5-D8-d6o"/>
                 <constraint firstAttribute="bottom" secondItem="bJh-OX-uNn" secondAttribute="bottom" id="9ei-yg-2wa"/>
-                <constraint firstItem="ROy-8h-PZe" firstAttribute="top" secondItem="e8b-2c-faz" secondAttribute="bottom" id="Av2-UY-6kX"/>
-                <constraint firstItem="ROy-8h-PZe" firstAttribute="top" secondItem="e8b-2c-faz" secondAttribute="bottom" id="BQq-0z-HB0"/>
+                <constraint firstItem="ROy-8h-PZe" firstAttribute="top" secondItem="gc3-ih-KLv" secondAttribute="top" id="Av2-UY-6kX"/>
                 <constraint firstItem="ROy-8h-PZe" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="H9o-9e-AqV"/>
                 <constraint firstItem="bO4-Z1-TaQ" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="HXo-NU-LLo"/>
-                <constraint firstItem="e8b-2c-faz" firstAttribute="top" secondItem="gc3-ih-KLv" secondAttribute="top" constant="-20" id="IYs-PD-KIl"/>
                 <constraint firstAttribute="trailing" secondItem="ROy-8h-PZe" secondAttribute="trailing" id="REq-TL-FAi"/>
                 <constraint firstItem="bJh-OX-uNn" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="SXR-xz-OPl"/>
                 <constraint firstItem="UBz-AC-zPY" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="WO6-ng-JyW"/>
                 <constraint firstItem="bJh-OX-uNn" firstAttribute="top" secondItem="ROy-8h-PZe" secondAttribute="bottom" id="fGm-dI-0xy"/>
                 <constraint firstItem="UBz-AC-zPY" firstAttribute="leading" secondItem="565-gf-1Of" secondAttribute="leading" id="hyq-7h-KbC"/>
-                <constraint firstItem="e8b-2c-faz" firstAttribute="trailing" secondItem="gc3-ih-KLv" secondAttribute="trailing" id="loB-Tl-yyc"/>
                 <constraint firstAttribute="trailing" secondItem="UBz-AC-zPY" secondAttribute="trailing" id="sYc-Bg-M3q"/>
-                <constraint firstItem="e8b-2c-faz" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="u3h-Fi-Jlf"/>
                 <constraint firstItem="bJh-OX-uNn" firstAttribute="trailing" secondItem="UBz-AC-zPY" secondAttribute="trailing" id="vhR-ye-O0W"/>
                 <constraint firstItem="bO4-Z1-TaQ" firstAttribute="leading" secondItem="gc3-ih-KLv" secondAttribute="leading" id="wA0-gJ-1bq"/>
                 <constraint firstItem="gc3-ih-KLv" firstAttribute="bottom" secondItem="bO4-Z1-TaQ" secondAttribute="bottom" id="ydL-Sx-wbg"/>
@@ -135,7 +109,6 @@
         <designable name="Wk1-Pa-llj"/>
     </designables>
     <resources>
-        <image name=" " width="128" height="128"/>
         <image name="noDataIcon" width="752" height="752"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

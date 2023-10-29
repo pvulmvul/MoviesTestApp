@@ -31,19 +31,18 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        homePresenter?.prepareForAppear()
         setupUI()
     }
     
     private func setupUI() {
         tableView.backgroundView = refreshControl
-        sortingButton.setTitle("Sorting".localized(), for: .normal)
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         searchBar.placeholder = "Search".localized()
-        navigationTitle.title = "Popular Movies".localized()
         lottieLoader.loopMode = .loop
     }
     
-    @IBAction private func sortingButtonPressed(_ sender: Any) {
+    @objc private func sortingButtonPressed(_ sender: Any) {
         guard let homePresenter = homePresenter else { return }
         homePresenter.handleSorting()
     }
@@ -81,6 +80,12 @@ extension HomeViewController: HomeViewProtocol {
         self.refreshControl.endRefreshing()
         lottieLoader.stop()
         loaderView.isHidden = true
+    }
+    
+    func setupNavBar() {
+        title = "Popular Movies".localized()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "sortingIcon"), style: .done, target: self, action: #selector(sortingButtonPressed))
+        navigationItem.rightBarButtonItem?.tintColor = .black
     }
 }
 

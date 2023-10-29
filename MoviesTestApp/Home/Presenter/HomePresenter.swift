@@ -14,6 +14,7 @@ protocol HomeViewProtocol: AnyObject {
     func hideEmptyStateView()
     func showEmptyStateView()
     func reloadTableView()
+    func setupNavBar()
 }
 
 protocol HomePresenterProtocol {
@@ -25,6 +26,7 @@ protocol HomePresenterProtocol {
     func refreshData()
     func handleSorting()
     func searchMovie(query: String)
+    func prepareForAppear()
 }
 
 final class HomePresenter: HomePresenterProtocol {
@@ -49,6 +51,9 @@ final class HomePresenter: HomePresenterProtocol {
         self.view = view
         self.networkService = networkService
         self.router = router
+    }
+    func prepareForAppear() {
+        self.view?.setupNavBar()
     }
     
     func refreshData() {
