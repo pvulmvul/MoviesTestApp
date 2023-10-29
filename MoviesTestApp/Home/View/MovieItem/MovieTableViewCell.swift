@@ -25,18 +25,10 @@ final class MovieTableViewCell: UITableViewCell {
     }
 
     func setupUI(model: MovieViewModel) {
-        ratingLabel.text = "Rating".localized() + ": " + String(model.voteAverage)
+        ratingLabel.text = model.voteAverage
         substrateView.backgroundColor = .black.withAlphaComponent(0.2)
-        titleLabel.text = "\(model.title), \(year(string: model.releaseDate))"
-        genresLabel.text = String(model.genres.joined(separator: ", "))
+        titleLabel.text = model.title
+        genresLabel.text = model.genres
         posterImageView.loadImage(imagePath: Constant.Server.imageURL + (model.posterPath ?? ""))
-    }
-    
-    func year(string: String) -> String {
-        DateFormatter.dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
-        DateFormatter.dateFormatter.dateFormat = "yyyy"
-        let year = DateFormatter.dateFormatter.string(from: date)
-        return year
     }
 }

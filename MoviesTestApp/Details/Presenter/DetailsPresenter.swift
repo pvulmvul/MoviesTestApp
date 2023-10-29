@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import UIKit
 
-protocol DetailsViewProtocol: NSObjectProtocol {
+protocol DetailsViewProtocol: AnyObject {
     func startAnimating()
     func finishAnimating()
-    func setupUI(movie: MovieDetails)
+    func setupUI(movie: MovieDetailsViewModel)
 }
 
 protocol DetailsPresenterProtocol {
@@ -19,19 +18,28 @@ protocol DetailsPresenterProtocol {
     func openTrailer()
 }
 
-class DetailsPresenter: DetailsPresenterProtocol {
-    weak var view: DetailsViewProtocol?
-    var movie: MovieDetails? {
+final class DetailsPresenter: DetailsPresenterProtocol {
+    private weak var view: DetailsViewProtocol?
+    private var movie: MovieDetails? {
         didSet {
             guard let movie = self.movie else {
                 return
             }
-            self.view?.setupUI(movie: movie)
+            let viewModel = MovieDetailsViewModel(
+                title: movie.title,
+                productionCountriesAndYear: countriesAndYear(),
+                genres: genres(),
+                posterPath: movie.posterPath,
+                overview: movie.overview,
+                videos: movie.videos,
+                voteAvarage: "Rating".localized() + ": " + String(format: "%.1f", movie.voteAverage)
+            )
+            self.view?.setupUI(movie: viewModel)
         }
     }
-    var movieId: Int
-    let networkService: MoviesAPIProtocol
-    var router: RouterProtocol
+    private var movieId: Int
+    private let networkService: MoviesAPIProtocol
+    private var router: RouterProtocol
     
     init(movieId: Int, view: DetailsViewProtocol?, networkService: MoviesAPIProtocol, router: RouterProtocol) {
         self.view = view
@@ -41,13 +49,12 @@ class DetailsPresenter: DetailsPresenterProtocol {
     }
     
     func fetchDetails() {
-        self.view?.startAnimating()
+        view?.startAnimating()
         networkService.getMovieDetails(id: movieId) { [weak self] (movie, error) in
             guard let self = self else { return }
             guard let movie = movie else {
-                guard let view = self.view as? UIViewController else { return }
                 self.router.popToRoot()
-                self.router.showAlert(view: view, title: "Error", description: error?.description ?? "unknown error")
+                self.router.showAlert(title: "Error", description: error?.description ?? "unknown error")
                 return
             }
             self.movie = movie
@@ -56,18 +63,40 @@ class DetailsPresenter: DetailsPresenterProtocol {
     }
     
     func openTrailer() {
-        guard let view = self.view as? UIViewController else { return }
         guard  let trailerID = movie?.videos.results.first(where: { video in
             video.type == "Trailer"
         })?.key else { return }
-        router.showPlayer(view: view, id: trailerID)
+        router.showPlayer(id: trailerID)
     }
     
-    func genres(movie: MovieDetails) -> [String] {
+    private func countriesAndYear() -> String {
+        guard let movie = movie else { return "" }
+        if movie.productionCountries.isEmpty {
+            return year(string: movie.releaseDate )
+        } else {
+            return "\(countries()), \(year(string: movie.releaseDate ))"
+        }
+    }
+    
+    private func genres() -> String {
         var genresNames: [String] = []
-        movie.genres.forEach { genre in
+        
+        movie?.genres.forEach { genre in
             genresNames.append(genre.name)
         }
-        return genresNames
+        
+        return genresNames.joined(separator: ", ")
+    }
+    
+    private func countries() -> String {
+        movie?.productionCountries.map { $0.name }.joined(separator: ", ") ?? ""
+    }
+    
+    private func year(string: String) -> String {
+        DateFormatter.dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
+        DateFormatter.dateFormatter.dateFormat = "yyyy"
+        let year = DateFormatter.dateFormatter.string(from: date)
+        return year
     }
 }

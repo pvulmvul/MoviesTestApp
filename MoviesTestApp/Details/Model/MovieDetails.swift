@@ -31,6 +31,16 @@ struct MovieDetails: Decodable {
     }
 }
 
+struct MovieDetailsViewModel {
+    let title: String
+    let productionCountriesAndYear: String
+    let genres: String
+    let posterPath: String?
+    let overview: String
+    let videos: Videos
+    let voteAvarage: String
+}
+
 // MARK: - Videos
 struct Videos: Decodable {
     let results: [Video]

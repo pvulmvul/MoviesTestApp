@@ -6,20 +6,26 @@
 //
 
 import UIKit
-import AVKit
 
 protocol AssemblyBuilderProtocol {
     func createHomeModule(router: RouterProtocol) -> UIViewController
-    func createDetailsModule(id: Int, title: String, router: RouterProtocol) -> UIViewController
+    func createDetailsModule(id: Int, router: RouterProtocol) -> UIViewController
     func createVideoViewerModule(id: String, router: RouterProtocol) -> UIViewController
     func createAlertController(title: String, description: String) -> UIAlertController
-    func createAlertSheet(checkedAction: UIAlertAction?, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void) -> UIAlertController
+    func createAlertSheet(checkedAction: AlertAction, title: String, description: String, completion: @escaping (_ action: AlertAction) -> Void) -> UIAlertController
 }
 
 class AssemblyBuilder: AssemblyBuilderProtocol {
     
+    private var networkService: MoviesAPIProtocol
+    
+    init(networkService: MoviesAPIProtocol) {
+        self.networkService = networkService
+    }
+    
     func createVideoViewerModule(id: String, router: RouterProtocol) -> UIViewController {
         let view = VideoViewerViewController()
+        view.modalPresentationStyle = .fullScreen
         view.presenter = VideoViewerPresenter(view: view, trailerID: id, router: router)
         return view
     }
@@ -31,14 +37,14 @@ class AssemblyBuilder: AssemblyBuilderProtocol {
         return alert
     }
     
-    func createAlertSheet(checkedAction: UIAlertAction?, title: String, description: String, completion: @escaping (_ action: UIAlertAction) -> Void) -> UIAlertController {
+    func createAlertSheet(checkedAction: AlertAction, title: String, description: String, completion: @escaping (_ action: AlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(title: title, message: description, preferredStyle: .actionSheet)
         let actionAsc = UIAlertAction(title: "Ascending".localized(), style: .default) { action in
-            completion(action)
+            completion(.ascending)
         }
         
         let actionDesc = UIAlertAction(title: "Descending".localized(), style: .default) { action in
-            completion(action)
+            completion(.descending)
         }
         
         let actionClose = UIAlertAction(title: "Ok", style: .cancel)
@@ -46,27 +52,22 @@ class AssemblyBuilder: AssemblyBuilderProtocol {
         alert.addAction(actionDesc)
         alert.addAction(actionClose)
         
-        if let checkedAction = checkedAction {
-            switch checkedAction.title {
-                case "Ascending".localized(): actionAsc.setValue(true, forKey: "checked")
-                case "Descending".localized(): actionDesc.setValue(true, forKey: "checked")
-                default: return alert
-            }
+        switch checkedAction {
+        case .ascending: actionAsc.setValue(true, forKey: "checked")
+        case .descending: actionDesc.setValue(true, forKey: "checked")
         }
         return alert
     }
     
     func createHomeModule(router: RouterProtocol) -> UIViewController {
         let view = HomeViewController()
-        let networkService = MoviesAPI()
         let presenter = HomePresenter(view: view, networkService: networkService, router: router)
         view.homePresenter = presenter
         return view
     }
     
-    func createDetailsModule(id: Int, title: String, router: RouterProtocol) -> UIViewController {
+    func createDetailsModule(id: Int, router: RouterProtocol) -> UIViewController {
         let view = DetailsViewController()
-        let networkService = MoviesAPI()
         let presenter = DetailsPresenter(movieId: id, view: view, networkService: networkService, router: router)
         view.detailsPresenter = presenter
         return view

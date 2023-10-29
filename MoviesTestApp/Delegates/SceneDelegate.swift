@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let window else { return }
 
-        let assemblyBuilder = AssemblyBuilder()
+        let networkService = MoviesAPI()
+        let assemblyBuilder = AssemblyBuilder(networkService: networkService)
         _ = Router(
             window: window,
             assemblyBuilder: assemblyBuilder
