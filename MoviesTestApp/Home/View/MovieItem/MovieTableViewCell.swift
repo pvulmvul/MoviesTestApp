@@ -27,7 +27,7 @@ final class MovieTableViewCell: UITableViewCell {
     func setupUI(model: MovieViewModel) {
         ratingLabel.text = model.voteAverage
         substrateView.backgroundColor = .black.withAlphaComponent(0.2)
-        titleLabel.text = model.title
+        titleLabel.text = model.title + model.year
         genresLabel.text = model.genres
         posterImageView.loadImage(imagePath: Constant.Server.imageURL + (model.posterPath ?? ""))
     }
