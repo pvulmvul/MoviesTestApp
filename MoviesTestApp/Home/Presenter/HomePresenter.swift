@@ -191,7 +191,8 @@ final class HomePresenter: HomePresenterProtocol {
             genres: genres(movie: movieFromAPI),
             overview: movieFromAPI.overview,
             posterPath: movieFromAPI.posterPath,
-            title: "\(movieFromAPI.title), \(year(string: movieFromAPI.releaseDate))",
+            title: movieFromAPI.title,
+            year: year(string: movieFromAPI.releaseDate),
             voteAverage: "Rating".localized() + ": " + String(movieFromAPI.voteAverage)
         )
     }
@@ -231,6 +232,6 @@ final class HomePresenter: HomePresenterProtocol {
         guard let date = DateFormatter.dateFormatter.date(from: string) else { return "" }
         DateFormatter.dateFormatter.dateFormat = "yyyy"
         let year = DateFormatter.dateFormatter.string(from: date)
-        return year
+        return ", \(year)"
     }
 }

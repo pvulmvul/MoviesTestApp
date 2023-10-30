@@ -46,6 +46,7 @@ struct MovieViewModel {
     let overview: String
     let posterPath: String?
     let title: String
+    let year: String
     let voteAverage: String
 }
 
