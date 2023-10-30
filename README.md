@@ -1,7 +1,7 @@
 # MoviesTestApp
 
 ## About
-This application allows you to see the list of popluar movies, search movies by title, sort movies by popularity and see the detailed info of a specific movie. 
+This application allows you to see the list of popular movies, search movies by title, sort movies by popularity and see the detailed info of a specific movie. 
 
 On **Details** screen you can see basic movie info and also able to open movie poster on full screen, or watch the movie trailer if it exists.
 ## Getting started
